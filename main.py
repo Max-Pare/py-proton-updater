@@ -11,12 +11,20 @@ def download_file():
         d_url = jreq[0].get('assets')[1].get('browser_download_url') # get newest item in releases 
         # print(d_url)
     except Exception as e:
-        print(e.with_traceback())
-        print("[FATAL] Something happened: something happened")
+        die(e)
     file_name = re.search(file_pattern, d_url).group()
     data = requests.get(d_url)
-    with open('./'+file_name, mode='wb') as file:
-        file.write(data.content)
+    try:
+        with open('./'+file_name, mode='wb') as file:
+            file.write(data.content)
+    except Exception as e1:
+        die(e1)
+    
+def die(_ex: Exception):
+    print(_ex.with_traceback())
+    print("[FATAL] Something happened: something happened")
+    exit(-1)
+
 
 if __name__=='__main__':
     download_file()        
