@@ -10,7 +10,7 @@ HOME_DIR = os.path.expanduser('~')
 
 def main():
     if os.geteuid() == 0: exit("Running this as root is a bad idea, quitting.")
-    if not os.path.isdir(TMP_DIR): os.mkdir(TMP_DIR) # TODO: tmp dirs are not dealt with after execution
+    if not os.path.isdir(TMP_DIR): os.mkdir(TMP_DIR)
     global proton_dir
     proton_dir = PROTON_DIRS[STEAM_VER]
     download_file(get_latest_download_url())
@@ -68,7 +68,10 @@ if __name__=='__main__':
     if platform.system == 'Windows': raise NotImplementedError('Windows is not supported.')
     if platform.system == 'Darwin': print('WARNING: Mac is not directly supported but it might still work.')
     detect_cosmic_ray()
-    main()
+    try:
+        main()
+    finally:
+        os.remove(TMP_DIR)
 
 
 # TODO:
